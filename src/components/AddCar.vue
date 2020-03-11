@@ -58,6 +58,7 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <button @click="resetForm" class="btn btn-danger">Reset form</button>
   </div>
 </template>
 
@@ -104,15 +105,13 @@ export default {
     },
 
     resetForm(){
-      this.car = {
-        brand: "",
-        model: "",
-        year: "",
-        maxSpeed: 0,
-        numberOfDoors: 0,
-        engine: "",
-        isAutomatic: false
-      }
+      this.brand = "";
+      this.model = "";
+      this.year = "";
+      this.maxSpeed =  0;
+      this.numberOfDoors = 0;
+      this.engine = "";
+      this.isAutomatic = false;
     }
   }
 }
