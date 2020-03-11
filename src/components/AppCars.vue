@@ -11,6 +11,9 @@
         <th>isAutomatic</th>
         <th>engine</th>
         <th>numberOfDoors</th>
+        <th>Details</th>
+        <th>Edit</th>
+        <th>Delete</th>
       </tr>
       <tr v-for="(car, i) in cars" :key="i">
         <td>{{ car.id }} </td>
@@ -21,15 +24,16 @@
         <td>{{ car.isAutomatic }} </td>
         <td>{{ car.engine }} </td>
         <td>{{ car.numberOfDoors }}</td>
+        <td><button @click="showDetails(car)" class="btn btn-info">Show</button></td>
+        <td><button class="btn btn-warning">Edit</button></td>
+        <td><button class="btn btn-danger">Delete</button></td>
       </tr>
     </table>
   </div>
 </template>
 
 <script>
-
 import  carService  from '../services/carService';// ne treba { } za carService, 
-
 export default {
   name: 'AppCars',
   data(){
@@ -42,11 +46,13 @@ export default {
 
     this.cars = await carService.getAll()
     console.log(this.cars);
+  },
+
+  methods:{
+    showDetails(car){
+      alert(JSON.stringify(car));
+    }
   }
-
-
 }
-
-
 </script>
 
