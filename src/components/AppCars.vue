@@ -28,7 +28,7 @@
 
 <script>
 
-import  carService  from '../services/carService';
+import  carService  from '../services/carService';// ne treba { } za carService, zaboravio sam zasto ne treba, porveriti
 
 export default {
   name: 'AppCars',
