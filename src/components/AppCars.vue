@@ -28,7 +28,7 @@
 
 <script>
 
-import  carService  from '../services/carService';// ne treba { } za carService, zaboravio sam zasto ne treba, porveriti
+import  carService  from '../services/carService';// ne treba { } za carService, 
 
 export default {
   name: 'AppCars',
@@ -38,7 +38,8 @@ export default {
       errors: [],
     }
   },
-  async created(){//i ovde moramo da koristimo async i await, iako smo to uradili i kada smo definisali ovu getAll funkciju. Async uvek znaci da se dobija promise.
+  async created(){//i ovde moramo da koristimo async i await, iako smo to uradili i kada smo definisali ovu getAll funkciju. Async uvek znaci da se dobija promise. Zelimo automatski da dobijemo sve automobile od api, automatski i odmah, cim se strana renderira. This created() is async, because it has to wait for the carService.getaAll(), which is also async, and also have to wait for the api to answer.
+
     this.cars = await carService.getAll()
     console.log(this.cars);
   }

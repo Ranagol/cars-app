@@ -4,18 +4,18 @@
     <form @submit.prevent="onSubmit">
       <div class="form-group">
           <label for="brand">Brand</label>
-          <input v-model="car.brand" type="text" class="form-control" id="brand" name="brand" placeholder="Enter Brand">
+          <input v-model="brand" type="text" class="form-control" id="brand" name="brand" placeholder="Enter Brand">
       </div>
 
       <div class="form-group">
           <label for="model">Model</label>
-          <input v-model="car.model" type="text" class="form-control" id="model" name="model" placeholder="Enter Model">
+          <input v-model="model" type="text" class="form-control" id="model" name="model" placeholder="Enter Model">
       </div>
 
       <!--GODINE -->
       <div class="form-group">
           <label for="year">Year</label>
-          <select name="year" v-model="car.year">
+          <select name="year" v-model="year">
               <option v-for="godina in getYearsRange()" :key="godina">
                   {{godina}}
               </option>
@@ -24,17 +24,17 @@
 
       <div class="form-group">
           <label for="max-speed">Max Speed</label>
-          <input type="number" v-model="car.maxSpeed" class="form-control" id="max-speed" name="max" placeholder="Enter Max Speed">
+          <input type="number" v-model="maxSpeed" class="form-control" id="max-speed" name="max" placeholder="Enter Max Speed">
       </div>
 
       <div class="form-group">
           <label for="number-of-doors">Number of doors</label>
-          <input type="number" v-model="car.numberOfDoors" class="form-control" name="doors" id="number-of-doors" placeholder="Enter Number Of Doors">
+          <input type="number" v-model="numberOfDoors" class="form-control" name="doors" id="number-of-doors" placeholder="Enter Number Of Doors">
       </div>
 
       <!--ISAUTOMATIC CHECKBOX. For checkboxes, the v-model binding values are booleans by default -->
       <div class="form-check">
-        <input type="checkbox" v-model="car.isAutomatic" class="form-check-input" name="automatic" id="is-automatic">
+        <input type="checkbox" v-model="isAutomatic" class="form-check-input" name="automatic" id="is-automatic">
         <label class="form-check-label"  for="is-automatic">Automatic</label>
       </div>
 
@@ -43,16 +43,16 @@
         <div class="input-group-text">
 
           <label for="diesel">Diesel</label>
-          <input type="radio" id="diesel" name="gorivo" v-model="car.engine" value="diesel" >
+          <input type="radio" id="diesel" name="gorivo" v-model="engine" value="diesel" >
 
           <label for="petrol">Petrol</label>
-          <input type="radio" id="petrol" name="gorivo" v-model="car.engine" value="petrol" >
+          <input type="radio" id="petrol" name="gorivo" v-model="engine" value="petrol" >
           
           <label for="electric">Electric</label>
-          <input type="radio" id="electric" name="gorivo" v-model="car.engine" value="electric">
+          <input type="radio" id="electric" name="gorivo" v-model="engine" value="electric">
 
           <label for="hybrid">Hybrid</label>
-          <input type="radio" id="hybrid" name="gorivo" v-model="car.engine" value="hybrid">
+          <input type="radio" id="hybrid" name="gorivo" v-model="engine" value="hybrid">
 
         </div>
       </div>
@@ -67,15 +67,13 @@ export default {
   name: 'AddCar',
   data() {
     return {
-      car: {
-        brand: "",
-        model: "",
-        year: "",
-        maxSpeed: 0,
-        numberOfDoors: 0,
-        engine: "",
-        isAutomatic: false
-      }
+      brand: "",//svaka input forma je povezana preko v-modela sa odgovarajucim propertijem iz data. 
+      model: "",
+      year: "",
+      maxSpeed: 0,
+      numberOfDoors: 0,
+      engine: "",
+      isAutomatic: false
     }
   },
   methods: {
@@ -87,31 +85,24 @@ export default {
       return godine;
     },
 
-    async onSubmit(event){
-      const { elements } = event.target;
-      
-      const brand = elements.brand.value;
-      const model = elements.model.value;
-      const year = elements.year.value;
-      const maxSpeed = elements.max.value;
-      const numberOfDoors = elements.doors.value; 
-      const isAutomatic = elements.automatic.checked;
-      const engine = elements.gorivo.value;
-
+    async onSubmit(){
+      //PUT ALL THE VALUES FROM THE INPUT FIELDS (now in our data) INTO A BODY OBJECT
       const body = {
-        brand,
-        model,
-        year,
-        maxSpeed,
-        isAutomatic,
-        engine,
-        numberOfDoors
+        brand: this.brand,
+        model: this.model,
+        year: this.year,
+        maxSpeed: this.maxSpeed,
+        isAutomatic: this.isAutomatic,
+        engine: this.engine,
+        numberOfDoors: this.numberOfDoors,
       }
-
+      
+      //USE THE BODY AS ARGUMENT FOR SENDING A POST REQUEST TO THE API
       await carService.createCar(body);
       alert("Uspesno kreiran automobil")
-      this.$router.push('/cars');//ovo je nacin kako mozemo redirektovati iz funkcije
+      this.$router.push('/cars');//ovo je nacin kako mozemo redirektovati iz funkcije, nakon sto smo kreirali nova kola
     },
+
     resetForm(){
       this.car = {
         brand: "",
