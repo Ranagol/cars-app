@@ -88,7 +88,7 @@ export default {
 
     async onSubmit(){
       //PUT ALL THE VALUES FROM THE INPUT FIELDS (now in our data) INTO A BODY OBJECT
-      const body = {
+      const body = {//this body object will be used for editing soon...
         brand: this.brand,
         model: this.model,
         year: this.year,
@@ -106,9 +106,6 @@ export default {
         alert("Uspesno kreiran automobil")
       }
       this.$router.push('/cars');//ovo je nacin kako mozemo redirektovati iz funkcije, nakon sto smo kreirali nova kola
-      
-      
-      
     },
 
     resetForm(){
@@ -123,7 +120,7 @@ export default {
   },
 
   async created(){
-    const id = this.$route.params.id;
+    const id = this.$route.params.id;//get the id from the route
     if (id) {//if there is an id in the parameter, that means that we want to edit a car, that has this id. So, get that car from the db.
       const carToEdit = await carService.getCarById(id);
       this.brand = carToEdit.brand;

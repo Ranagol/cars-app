@@ -25,8 +25,8 @@
         <td>{{ car.engine }} </td>
         <td>{{ car.numberOfDoors }}</td>
         <td><button @click="showDetails(car)" class="btn btn-info">Show</button></td>
-        <td><router-link :to="edit(car.id)" class="btn btn-warning">Edit</router-link></td>
-        <td><button class="btn btn-danger">Delete</button></td>
+        <td><router-link :to="`/edit/${car.id}`" class="btn btn-warning">Edit</router-link></td>
+        <td><button @click="deleteCar(car.id)" class="btn btn-danger">Delete</button></td>
       </tr>
     </table>
   </div>
@@ -52,8 +52,9 @@ export default {
     showDetails(car){
       alert(JSON.stringify(car));
     },
-    edit(id){
-      return `/edit/${id}`;
+    deleteCar(id){
+      carService.deleteCar(id);//here we delete the car from the API
+      this.cars = this.cars.filter( car => car.id !== id);//here we delete the same car from our array. This way Vue will be able to rerender the page, and the deleted car will disappear from the screen. For deleting we use the filter command: take the cars one by one from the car array, and create a new array without the car that has the given id.
     }
   }
 }
