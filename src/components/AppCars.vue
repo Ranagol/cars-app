@@ -25,7 +25,7 @@
         <td>{{ car.engine }} </td>
         <td>{{ car.numberOfDoors }}</td>
         <td><button @click="showDetails(car)" class="btn btn-info">Show</button></td>
-        <td><button class="btn btn-warning">Edit</button></td>
+        <td><router-link :to="edit(car.id)" class="btn btn-warning">Edit</router-link></td>
         <td><button class="btn btn-danger">Delete</button></td>
       </tr>
     </table>
@@ -51,6 +51,9 @@ export default {
   methods:{
     showDetails(car){
       alert(JSON.stringify(car));
+    },
+    edit(id){
+      return `/edit/${id}`;
     }
   }
 }

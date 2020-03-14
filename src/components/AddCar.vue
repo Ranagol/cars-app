@@ -1,22 +1,22 @@
 <template>
   <div>
-    <p>AddCar.vue</p>
     <form @submit.prevent="onSubmit">
+      
       <div class="form-group">
           <label for="brand">Brand</label>
-          <input v-model="brand" type="text" class="form-control" id="brand" name="brand" placeholder="Enter Brand">
+          <input v-model="brand" type="text" class="form-control" id="brand" name="brand" placeholder="Enter Brand" required minlength="2">
       </div>
 
       <div class="form-group">
           <label for="model">Model</label>
-          <input v-model="model" type="text" class="form-control" id="model" name="model" placeholder="Enter Model">
+          <input v-model="model" type="text" class="form-control" id="model" name="model" placeholder="Enter Model" required  minlength="2">
       </div>
 
       <!--GODINE -->
       <div class="form-group">
           <label for="year">Year</label>
           <select name="year" v-model="year">
-              <option v-for="godina in getYearsRange()" :key="godina">
+              <option v-for="godina in getYearsRange()" :key="godina" required>
                   {{godina}}
               </option>
           </select>
@@ -24,12 +24,12 @@
 
       <div class="form-group">
           <label for="max-speed">Max Speed</label>
-          <input type="number" v-model="maxSpeed" class="form-control" id="max-speed" name="max" placeholder="Enter Max Speed">
+          <input type="number" v-model="maxSpeed" class="form-control" id="max-speed" name="max" placeholder="Enter Max Speed" required>
       </div>
 
       <div class="form-group">
           <label for="number-of-doors">Number of doors</label>
-          <input type="number" v-model="numberOfDoors" class="form-control" name="doors" id="number-of-doors" placeholder="Enter Number Of Doors">
+          <input type="number" v-model="numberOfDoors" class="form-control" name="doors" id="number-of-doors" placeholder="Enter Number Of Doors" required>
       </div>
 
       <!--ISAUTOMATIC CHECKBOX. For checkboxes, the v-model binding values are booleans by default -->
@@ -43,16 +43,16 @@
         <div class="input-group-text">
 
           <label for="diesel">Diesel</label>
-          <input type="radio" id="diesel" name="gorivo" v-model="engine" value="diesel" >
+          <input type="radio" id="diesel" name="gorivo" v-model="engine" value="diesel" required>
 
           <label for="petrol">Petrol</label>
-          <input type="radio" id="petrol" name="gorivo" v-model="engine" value="petrol" >
+          <input type="radio" id="petrol" name="gorivo" v-model="engine" value="petrol" required>
           
           <label for="electric">Electric</label>
-          <input type="radio" id="electric" name="gorivo" v-model="engine" value="electric">
+          <input type="radio" id="electric" name="gorivo" v-model="engine" value="electric" required>
 
           <label for="hybrid">Hybrid</label>
-          <input type="radio" id="hybrid" name="gorivo" v-model="engine" value="hybrid">
+          <input type="radio" id="hybrid" name="gorivo" v-model="engine" value="hybrid" required>
 
         </div>
       </div>
@@ -74,7 +74,7 @@ export default {
       maxSpeed: 0,
       numberOfDoors: 0,
       engine: "",
-      isAutomatic: false
+      isAutomatic: false,
     }
   },
   methods: {
@@ -97,11 +97,18 @@ export default {
         engine: this.engine,
         numberOfDoors: this.numberOfDoors,
       }
-      
-      //USE THE BODY AS ARGUMENT FOR SENDING A POST REQUEST TO THE API
-      await carService.createCar(body);
-      alert("Uspesno kreiran automobil")
+
+      //THE TRICKY PART
+      if (this.$route.params.id) {//if there is an id in the route (aka we are editing a car)...
+        await carService.editCar(body, this.$route.params.id)//...then activate the carService.editCar
+      } else {
+        await carService.createCar(body);//USE THE BODY AS ARGUMENT FOR SENDING A POST REQUEST TO THE API
+        alert("Uspesno kreiran automobil")
+      }
       this.$router.push('/cars');//ovo je nacin kako mozemo redirektovati iz funkcije, nakon sto smo kreirali nova kola
+      
+      
+      
     },
 
     resetForm(){
@@ -112,8 +119,22 @@ export default {
       this.numberOfDoors = 0;
       this.engine = "";
       this.isAutomatic = false;
+    },
+  },
+
+  async created(){
+    const id = this.$route.params.id;
+    if (id) {//if there is an id in the parameter, that means that we want to edit a car, that has this id. So, get that car from the db.
+      const carToEdit = await carService.getCarById(id);
+      this.brand = carToEdit.brand;
+      this.model = carToEdit.model;
+      this.year = carToEdit.year;
+      this.maxSpeed =  carToEdit.maxSpeed;
+      this.numberOfDoors = carToEdit.numberOfDoors;
+      this.engine = carToEdit.engine;
+      this.isAutomatic = carToEdit.isAutomatic;
     }
-  }
+  },
 }
 </script>
 

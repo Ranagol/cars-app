@@ -13,6 +13,22 @@ class CarService {
   async createCar(body){//ovde kreiramo post request. body argument ce sadrzati podatke automobila iz input forme
     await HTTP.post("/cars", body );//nas post request
   }
+
+  //SHOW
+  async getCarById(id) {
+    const response  = await HTTP.get(`/cars/${id}`);
+    return response.data;
+  }
+
+  //EDIT
+  async editCar(body, id) {
+    await HTTP.put(`/cars/${id}`, body);
+  }
+
+  //DELETE
+  async deleteCar(id) {
+    await HTTP.delete(`/cars/${id}`);
+  }
 }
 
 const carService = new CarService();

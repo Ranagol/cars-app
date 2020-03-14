@@ -7,7 +7,8 @@ import VueRouter from 'vue-router'
 const routes = [
   { path:'', redirect:'/cars'},
   { path:'/cars', name: 'cars', component: AppCars },
-  { path:'/add', name: 'add', component: AddCar }
+  { path:'/add', name: 'add', component: AddCar },
+  { path:'/edit/:id', name: 'edit', component: AddCar },
 ];
 
 Vue.use(VueRouter);
